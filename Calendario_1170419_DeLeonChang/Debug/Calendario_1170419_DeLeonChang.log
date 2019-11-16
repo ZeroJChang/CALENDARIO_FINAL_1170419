@@ -1,7 +1,5 @@
 ﻿  Calendario.cpp
   MyForm.cpp
-C:\Users\ZeroJChang\source\repos\Calendario_1170419_DeLeonChang\Calendario_1170419_DeLeonChang\Calendario.h(1408,10): warning C4101:  'datos': variable local sin referencia
   Generando código...
-C:\Users\ZeroJChang\source\repos\Calendario_1170419_DeLeonChang\Calendario_1170419_DeLeonChang\Calendario.h(1408,10): warning C4101:  'datos': variable local sin referencia
   Calendario.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
   Calendario_1170419_DeLeonChang.vcxproj -> C:\Users\ZeroJChang\source\repos\Calendario_1170419_DeLeonChang\Debug\Calendario_1170419_DeLeonChang.exe

@@ -1,6 +1,17 @@
 #pragma once
+//librerias a usar
 #include <string>
 #include <iostream>
+#include <windows.h>
+#include <stdio.h>
+
+
+//AYUDA WEB
+//https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox
+//https://docs.microsoft.com/es-es/dotnet/framework/winforms/controls/how-to-load-a-sound-asynchronously-within-a-windows-form
+
+//YOUTUBE
+//https://www.youtube.com/watch?v=O8CD2CIhQO8
 
 namespace Calendario1170419DeLeonChang {
 
@@ -10,17 +21,30 @@ namespace Calendario1170419DeLeonChang {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+
+	//Estas nos serviran para que funcione correctamente xd
 	using namespace System::IO;
 	using namespace System::Diagnostics;
+	using namespace System::Collections::Generic;
+	using namespace System::Media;
+	
+	
+	
+
 	/// <summary>
 	/// Resumen de Calendario
 	/// </summary>
 	public ref class Calendario : public System::Windows::Forms::Form
 	{
+
+	
+		
 	public:
 		Calendario(void)
 		{
 			InitializeComponent();
+			
+			
 			//
 			//TODO: agregar código de constructor aquí
 			//
@@ -136,12 +160,15 @@ private: System::Windows::Forms::GroupBox^ groupEditar;
 
 private: System::Windows::Forms::Button^ btnActualizar;
 private: System::Windows::Forms::TextBox^ txtEditar;
+private: System::Windows::Forms::Button^ btnAceptar;
 
-private: System::Windows::Forms::Button^ button1;
+
 private: System::Windows::Forms::ComboBox^ cmbTipoTarea;
 private: System::Windows::Forms::ComboBox^ cmbHora;
-private: System::Windows::Forms::ComboBox^ comboBox2;
-private: System::Windows::Forms::ComboBox^ comboBox1;
+private: System::Windows::Forms::ComboBox^ cmbHORARIA;
+private: System::Windows::Forms::ComboBox^ cmbMinutos;
+
+
 private: System::Windows::Forms::Label^ label4;
 private: System::Windows::Forms::Label^ label3;
 private: System::Windows::Forms::Label^ label2;
@@ -150,6 +177,18 @@ private: System::Windows::Forms::TextBox^ txtAgregar;
 private: System::Windows::Forms::Label^ label5;
 private: System::Windows::Forms::Label^ label6;
 private: System::Windows::Forms::ComboBox^ cmbDia;
+private: System::Windows::Forms::Timer^ ContadorDias;
+private: System::Windows::Forms::Timer^ Aplazador;
+private: System::Windows::Forms::Label^ lblDia;
+private: System::Windows::Forms::TextBox^ txtAlarma;
+
+private: System::Windows::Forms::Button^ button1;
+private: System::Windows::Forms::Label^ label7;
+private: System::Windows::Forms::Button^ button4;
+private: System::Windows::Forms::Button^ button5;
+
+
+private: System::ComponentModel::IContainer^ components;
 
 
 
@@ -159,7 +198,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 		/// <summary>
 		/// Variable del diseñador necesaria.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -168,6 +207,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Calendario::typeid));
 			this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
 			this->btnEditar = (gcnew System::Windows::Forms::Button());
@@ -247,14 +287,22 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
-			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
+			this->cmbHORARIA = (gcnew System::Windows::Forms::ComboBox());
+			this->cmbMinutos = (gcnew System::Windows::Forms::ComboBox());
 			this->cmbHora = (gcnew System::Windows::Forms::ComboBox());
-			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->btnAceptar = (gcnew System::Windows::Forms::Button());
 			this->cmbTipoTarea = (gcnew System::Windows::Forms::ComboBox());
 			this->groupEditar = (gcnew System::Windows::Forms::GroupBox());
 			this->btnActualizar = (gcnew System::Windows::Forms::Button());
 			this->txtEditar = (gcnew System::Windows::Forms::TextBox());
+			this->ContadorDias = (gcnew System::Windows::Forms::Timer(this->components));
+			this->Aplazador = (gcnew System::Windows::Forms::Timer(this->components));
+			this->lblDia = (gcnew System::Windows::Forms::Label());
+			this->txtAlarma = (gcnew System::Windows::Forms::TextBox());
+			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->button4 = (gcnew System::Windows::Forms::Button());
+			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->groupBox2->SuspendLayout();
 			this->groupBox3->SuspendLayout();
 			this->groupAgregar->SuspendLayout();
@@ -338,6 +386,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			// 
 			// btnEditar
 			// 
+			this->btnEditar->Enabled = false;
 			this->btnEditar->Location = System::Drawing::Point(248, 205);
 			this->btnEditar->Name = L"btnEditar";
 			this->btnEditar->Size = System::Drawing::Size(115, 37);
@@ -595,6 +644,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			// 
 			// btnLeer
 			// 
+			this->btnLeer->Enabled = false;
 			this->btnLeer->Location = System::Drawing::Point(775, 197);
 			this->btnLeer->Name = L"btnLeer";
 			this->btnLeer->Size = System::Drawing::Size(115, 53);
@@ -655,21 +705,25 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			// 
 			// button3
 			// 
+			this->button3->Enabled = false;
 			this->button3->Location = System::Drawing::Point(127, 205);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(115, 37);
 			this->button3->TabIndex = 30;
 			this->button3->Text = L"Borrar Tareas";
 			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &Calendario::Button3_Click);
 			// 
 			// button2
 			// 
+			this->button2->Enabled = false;
 			this->button2->Location = System::Drawing::Point(6, 205);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(115, 37);
 			this->button2->TabIndex = 29;
 			this->button2->Text = L"Agregar Tarea";
 			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &Calendario::Button2_Click);
 			// 
 			// Dia29
 			// 
@@ -880,6 +934,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->Dia9->Name = L"Dia9";
 			this->Dia9->Size = System::Drawing::Size(83, 52);
 			this->Dia9->TabIndex = 7;
+			this->Dia9->Click += gcnew System::EventHandler(this, &Calendario::Dia9_Click);
 			this->Dia9->SelectedIndexChanged += gcnew System::EventHandler(this, &Calendario::Dia9_SelectedIndexChanged);
 			// 
 			// Dia10
@@ -901,6 +956,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->Dia8->Name = L"Dia8";
 			this->Dia8->Size = System::Drawing::Size(83, 52);
 			this->Dia8->TabIndex = 6;
+			this->Dia8->Click += gcnew System::EventHandler(this, &Calendario::Dia8_Click);
 			this->Dia8->SelectedIndexChanged += gcnew System::EventHandler(this, &Calendario::Dia8_SelectedIndexChanged);
 			// 
 			// Dia7
@@ -911,6 +967,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->Dia7->Name = L"Dia7";
 			this->Dia7->Size = System::Drawing::Size(83, 52);
 			this->Dia7->TabIndex = 5;
+			this->Dia7->Click += gcnew System::EventHandler(this, &Calendario::Dia7_Click);
 			this->Dia7->SelectedIndexChanged += gcnew System::EventHandler(this, &Calendario::Dia7_SelectedIndexChanged);
 			// 
 			// Dia6
@@ -978,7 +1035,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->groupBox3->Controls->Add(this->lblCambio);
 			this->groupBox3->Location = System::Drawing::Point(20, 317);
 			this->groupBox3->Name = L"groupBox3";
-			this->groupBox3->Size = System::Drawing::Size(904, 133);
+			this->groupBox3->Size = System::Drawing::Size(904, 64);
 			this->groupBox3->TabIndex = 3;
 			this->groupBox3->TabStop = false;
 			this->groupBox3->Text = L"Tareas del dia";
@@ -1001,11 +1058,12 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->groupAgregar->Controls->Add(this->label3);
 			this->groupAgregar->Controls->Add(this->label2);
 			this->groupAgregar->Controls->Add(this->label1);
-			this->groupAgregar->Controls->Add(this->comboBox2);
-			this->groupAgregar->Controls->Add(this->comboBox1);
+			this->groupAgregar->Controls->Add(this->cmbHORARIA);
+			this->groupAgregar->Controls->Add(this->cmbMinutos);
 			this->groupAgregar->Controls->Add(this->cmbHora);
-			this->groupAgregar->Controls->Add(this->button1);
+			this->groupAgregar->Controls->Add(this->btnAceptar);
 			this->groupAgregar->Controls->Add(this->cmbTipoTarea);
+			this->groupAgregar->Enabled = false;
 			this->groupAgregar->Location = System::Drawing::Point(931, 22);
 			this->groupAgregar->Name = L"groupAgregar";
 			this->groupAgregar->Size = System::Drawing::Size(207, 289);
@@ -1088,26 +1146,26 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->label1->TabIndex = 68;
 			this->label1->Text = L"Tipo tarea";
 			// 
-			// comboBox2
+			// cmbHORARIA
 			// 
-			this->comboBox2->FormattingEnabled = true;
-			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"AM", L"PM" });
-			this->comboBox2->Location = System::Drawing::Point(134, 106);
-			this->comboBox2->Name = L"comboBox2";
-			this->comboBox2->Size = System::Drawing::Size(59, 24);
-			this->comboBox2->TabIndex = 67;
+			this->cmbHORARIA->FormattingEnabled = true;
+			this->cmbHORARIA->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"AM", L"PM" });
+			this->cmbHORARIA->Location = System::Drawing::Point(134, 106);
+			this->cmbHORARIA->Name = L"cmbHORARIA";
+			this->cmbHORARIA->Size = System::Drawing::Size(59, 24);
+			this->cmbHORARIA->TabIndex = 67;
 			// 
-			// comboBox1
+			// cmbMinutos
 			// 
-			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(12) {
+			this->cmbMinutos->FormattingEnabled = true;
+			this->cmbMinutos->Items->AddRange(gcnew cli::array< System::Object^  >(12) {
 				L"0", L"5", L"10", L"15", L"20", L"25", L"30",
 					L"35", L"40", L"45", L"50", L"55"
 			});
-			this->comboBox1->Location = System::Drawing::Point(69, 106);
-			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(59, 24);
-			this->comboBox1->TabIndex = 66;
+			this->cmbMinutos->Location = System::Drawing::Point(69, 106);
+			this->cmbMinutos->Name = L"cmbMinutos";
+			this->cmbMinutos->Size = System::Drawing::Size(59, 24);
+			this->cmbMinutos->TabIndex = 66;
 			// 
 			// cmbHora
 			// 
@@ -1121,15 +1179,15 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->cmbHora->Size = System::Drawing::Size(59, 24);
 			this->cmbHora->TabIndex = 65;
 			// 
-			// button1
+			// btnAceptar
 			// 
-			this->button1->Location = System::Drawing::Point(7, 246);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(186, 37);
-			this->button1->TabIndex = 64;
-			this->button1->Text = L"Aceptar";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &Calendario::Button1_Click);
+			this->btnAceptar->Location = System::Drawing::Point(7, 246);
+			this->btnAceptar->Name = L"btnAceptar";
+			this->btnAceptar->Size = System::Drawing::Size(186, 37);
+			this->btnAceptar->TabIndex = 64;
+			this->btnAceptar->Text = L"Aceptar";
+			this->btnAceptar->UseVisualStyleBackColor = true;
+			this->btnAceptar->Click += gcnew System::EventHandler(this, &Calendario::Button1_Click);
 			// 
 			// cmbTipoTarea
 			// 
@@ -1144,6 +1202,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			// 
 			this->groupEditar->Controls->Add(this->btnActualizar);
 			this->groupEditar->Controls->Add(this->txtEditar);
+			this->groupEditar->Enabled = false;
 			this->groupEditar->Location = System::Drawing::Point(930, 317);
 			this->groupEditar->Name = L"groupEditar";
 			this->groupEditar->Size = System::Drawing::Size(200, 133);
@@ -1159,6 +1218,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->btnActualizar->TabIndex = 64;
 			this->btnActualizar->Text = L"Actualizar Tarea";
 			this->btnActualizar->UseVisualStyleBackColor = true;
+			this->btnActualizar->Click += gcnew System::EventHandler(this, &Calendario::BtnActualizar_Click);
 			// 
 			// txtEditar
 			// 
@@ -1168,11 +1228,83 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->txtEditar->Size = System::Drawing::Size(187, 68);
 			this->txtEditar->TabIndex = 0;
 			// 
+			// ContadorDias
+			// 
+			this->ContadorDias->Interval = 10000;
+			this->ContadorDias->Tick += gcnew System::EventHandler(this, &Calendario::ContadorDias_Tick);
+			// 
+			// Aplazador
+			// 
+			this->Aplazador->Interval = 6000;
+			this->Aplazador->Tick += gcnew System::EventHandler(this, &Calendario::Aplazador_Tick);
+			// 
+			// lblDia
+			// 
+			this->lblDia->AutoSize = true;
+			this->lblDia->Location = System::Drawing::Point(20, 389);
+			this->lblDia->Name = L"lblDia";
+			this->lblDia->Size = System::Drawing::Size(16, 17);
+			this->lblDia->TabIndex = 6;
+			this->lblDia->Text = L"1";
+			// 
+			// txtAlarma
+			// 
+			this->txtAlarma->Location = System::Drawing::Point(244, 420);
+			this->txtAlarma->Name = L"txtAlarma";
+			this->txtAlarma->Size = System::Drawing::Size(302, 22);
+			this->txtAlarma->TabIndex = 64;
+			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(552, 389);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(115, 53);
+			this->button1->TabIndex = 65;
+			this->button1->Text = L"INGRESAR ALARMA";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &Calendario::Button1_Click_1);
+			// 
+			// label7
+			// 
+			this->label7->AutoSize = true;
+			this->label7->Location = System::Drawing::Point(244, 397);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(171, 17);
+			this->label7->TabIndex = 66;
+			this->label7->Text = L"INGRESE RUTA ALARMA";
+			// 
+			// button4
+			// 
+			this->button4->Enabled = false;
+			this->button4->Location = System::Drawing::Point(672, 389);
+			this->button4->Name = L"button4";
+			this->button4->Size = System::Drawing::Size(115, 53);
+			this->button4->TabIndex = 67;
+			this->button4->Text = L"Prueba alarma";
+			this->button4->UseVisualStyleBackColor = true;
+			this->button4->Click += gcnew System::EventHandler(this, &Calendario::Button4_Click);
+			// 
+			// button5
+			// 
+			this->button5->Location = System::Drawing::Point(793, 387);
+			this->button5->Name = L"button5";
+			this->button5->Size = System::Drawing::Size(115, 53);
+			this->button5->TabIndex = 68;
+			this->button5->Text = L"EXPORTAR CALENDARIO";
+			this->button5->UseVisualStyleBackColor = true;
+			this->button5->Click += gcnew System::EventHandler(this, &Calendario::Button5_Click);
+			// 
 			// Calendario
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1192, 475);
+			this->Controls->Add(this->button5);
+			this->Controls->Add(this->button4);
+			this->Controls->Add(this->label7);
+			this->Controls->Add(this->txtAlarma);
+			this->Controls->Add(this->lblDia);
+			this->Controls->Add(this->button1);
 			this->Controls->Add(this->groupEditar);
 			this->Controls->Add(this->groupAgregar);
 			this->Controls->Add(this->groupBox3);
@@ -1190,19 +1322,40 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			this->groupEditar->ResumeLayout(false);
 			this->groupEditar->PerformLayout();
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
 	private: System::Void Calendario_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
+
+			 ///////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Nos ayudara a ver en que dia estamos
+	int GlobalDia = 0;
+	int AyudaDia;
 	//Variable en la cual podremos mandar a llamar nuestro archivo txt
 	String^ Ruta = "";
-	int AyudaDia;
+
+	//Esta servira para la cancion
+	String^ Ruta2 = "";
+	//private: SoundPlayer Player = new SoundPlayer();
+
+
+	
 	//ARREGLO PARA USUARIO el usuario
 	array<String^>^ ArregloString = gcnew array< String^ >(30);
 	
+	//ARREGLO PARA ALARMAS el usuario
+	array<String^>^ ArregloALARMAS = gcnew array< String^ >(30);
+	//ARREGLO PARA RECORDATORIO el usuario
+	array<String^>^ ArregloRECORDATORIO = gcnew array< String^ >(30);
 	private: System::Void BtnLeer_Click(System::Object^ sender, System::EventArgs^ e) {
+		button5->Enabled = true;
+		button2->Enabled = true;
+		button3->Enabled = true;
+		btnEditar->Enabled = true;
 		Ruta = txtIngreseRuta->Text;
+
 		//C:\Users\ZeroJChang\Desktop\Archivo1.txt
 		if (Ruta != "")
 		{
@@ -1210,10 +1363,11 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 			{
 
 				LeerArchivo1();
-
+				ContadorDias->Enabled = true;
 				Oka->Text = "Se encontro el archivo y se guardo correctamente :D";
 				Oka->ForeColor = ForeColor.Green;
 				Oka->Visible = true;
+				
 			}
 			catch (const std::exception&)
 			{
@@ -1236,6 +1390,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 				 try {
 					 StreamReader^ Lector = gcnew StreamReader(Ruta);
 					 String^ Linea = Lector->ReadLine();
+					 
 					 int contador = 0;
 					 //Mientras linea sea != de null
 					 while (Linea != nullptr)
@@ -1248,6 +1403,7 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 						 // lo queres hacer con el arreglo
 						 Linea = Lector->ReadLine();
 					 }
+					 Lector->Close();
 				 }
 				 catch(const std::exception&){
 					 System::Windows::Forms::MessageBox::Show("La ruta no existe :C (REVISAR)", "T_T");
@@ -1264,6 +1420,12 @@ private: System::Windows::Forms::ComboBox^ cmbDia;
 				 
 				 txtEditar->Text = ArregloString[a];
 				 
+			 }
+
+			 void borrarDatos(int a) {
+
+				 ArregloString[a]="";
+
 			 }
 private: System::Void Dia1_Click(System::Object^ sender, System::EventArgs^ e) {
 	mostrarDatos(System::Convert::ToInt32(lbl1->Text) -1);
@@ -1403,23 +1565,187 @@ private: System::Void Dia30_Click(System::Object^ sender, System::EventArgs^ e) 
 }
 private: System::Void BtnEditar_Click(System::Object^ sender, System::EventArgs^ e) {
 	mostrarEditar(AyudaDia);
+	groupEditar->Enabled=true;
 }
+
+
 private: System::Void Button1_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ datos;
-	int dia;
+	String^ datos="";
+	int dia =0;
 
 	dia = System::Convert::ToInt32(cmbDia->Text) - 1;
-	if (cmbDia->Text->Equals("SIMPLE")) {
-
+	if (cmbTipoTarea->Text->Equals("SIMPLE")) {
+		ArregloString[dia] = ArregloString[dia] + " S: "+ txtAgregar->Text+ " " + cmbHora->Text + ":" + cmbMinutos->Text+ cmbHORARIA->Text;
+		//ArregloString[System::Convert::ToInt32(cmbDia->Text) - 1] = "S: " + txtAgregar + cmbHora->Text + ":" + cmbMinutos->Text + cmbHORARIA;
 	}
-	else if (cmbDia->Text->Equals("RECORDATORIO")) {
-
+	else if (cmbTipoTarea->Text->Equals("RECORDATORIO")) {
+		ArregloString[dia] = ArregloString[dia] + " R: " + txtAgregar->Text + " " + cmbHora->Text + ":" + cmbMinutos->Text + cmbHORARIA->Text;
+		ArregloRECORDATORIO[dia] = ArregloRECORDATORIO[dia]+ "R: " + txtAgregar->Text + " " + cmbHora->Text + ":" + cmbMinutos->Text + cmbHORARIA->Text;
 	}
-	else if (cmbDia->Text->Equals("ALARMA")) {
-
+	else if (cmbTipoTarea->Text->Equals("ALARMA")) {
+		ArregloString[dia] = ArregloString[dia] + " A: " + txtAgregar->Text + " " + cmbHora->Text + ":" + cmbMinutos->Text + cmbHORARIA->Text;
+		ArregloALARMAS[dia] = ArregloALARMAS[dia] + "A: " + txtAgregar->Text + " " + cmbHora->Text + ":" + cmbMinutos->Text + cmbHORARIA->Text;
 	}
+	txtAgregar->Text = "";
+	cmbDia->Text = "";
+	cmbHora->Text = "";
+	cmbMinutos->Text = "";
+	cmbHORARIA->Text = "";
+	groupAgregar->Enabled = false;
 }
 
 
+private: System::Void Dia7_Click(System::Object^ sender, System::EventArgs^ e) {
+	mostrarDatos(System::Convert::ToInt32(lbl7->Text) - 1);
+	AyudaDia = System::Convert::ToInt32(lbl7->Text) - 1;
+}
+private: System::Void Dia8_Click(System::Object^ sender, System::EventArgs^ e) {
+	mostrarDatos(System::Convert::ToInt32(lbl8->Text) - 1);
+	AyudaDia = System::Convert::ToInt32(lbl8->Text) - 1;
+}
+private: System::Void Dia9_Click(System::Object^ sender, System::EventArgs^ e) {
+	mostrarDatos(System::Convert::ToInt32(lbl9->Text) - 1);
+	AyudaDia = System::Convert::ToInt32(lbl9->Text) - 1;
+}
+private: System::Void BtnActualizar_Click(System::Object^ sender, System::EventArgs^ e) {
+	
+	System::Windows::Forms::DialogResult::Yes;
+	if (MessageBox::Show(System::Convert::ToString(ArregloString[AyudaDia] + " se actualizara a " + txtEditar->Text), "ACTUALIZAR", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+	{
+		MessageBox::Show("OKAY :D", "ACTUALIZADO");
+		ArregloString[AyudaDia] = txtEditar->Text;
+
+		txtEditar->Text = "";
+		groupEditar->Enabled = false;
+	}
+	else
+	{
+		MessageBox::Show("No actualizo", "NO ACTUALIZADO");
+		txtEditar->Text = "";
+		groupEditar->Enabled = false;
+	}
+
+}
+		 
+		 //ESTE SERVIRA PARA LOS RECORDATORIOS
+		 void validarRECORDATORIO() {
+			 
+			 if (ArregloRECORDATORIO[GlobalDia] != nullptr) {
+				 System::Windows::Forms::DialogResult::Yes;
+				 ContadorDias->Enabled = false;
+				 if (MessageBox::Show(System::Convert::ToString(ArregloString[GlobalDia]) + " ¿Desea posponer?", "Recordatorio", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+				 {
+					 GlobalDia--;
+					 MessageBox::Show("5 mins mas :D", "APLAZAR");
+					 Aplazador->Enabled = true;
+				 }
+				 else
+				 {
+					 MessageBox::Show("Ojala realice todas sus actividades! :D", "TERMINAR");
+					 ContadorDias->Enabled = true;
+					 ArregloRECORDATORIO[GlobalDia] = nullptr;
+				 }
+				 
+				 
+			 }
+
+			 if (ArregloALARMAS[GlobalDia] != nullptr) {
+				 SoundPlayer^ osi = gcnew SoundPlayer(Ruta2);
+				 osi->PlayLooping();
+				 System::Windows::Forms::DialogResult::Yes;
+				 ContadorDias->Enabled = false;
+				 if (MessageBox::Show(System::Convert::ToString(ArregloString[GlobalDia]) + " ¿Desea posponer?", "ALARMA", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+				 {
+					 groupAgregar->Enabled = false;
+					 groupEditar->Enabled = false;
+					 groupBox2->Enabled = false;
+					 groupBox3->Enabled = false;
+					 osi->Stop();
+					 GlobalDia--;
+					 MessageBox::Show("5 mins mas :D", "APLAZAR");
+					 Aplazador->Enabled = true;
+
+					 groupBox2->Enabled = true;
+					 groupBox3->Enabled = true;
+				 }
+				 else
+				 {
+					 groupAgregar->Enabled = false;
+					 groupEditar->Enabled = false;
+					 groupBox2->Enabled = false;
+					 groupBox3->Enabled = false;
+					 MessageBox::Show("Ojala realice todas sus actividades! :D", "TERMINAR");
+					 ContadorDias->Enabled = true;
+					 ArregloALARMAS[GlobalDia] = nullptr;
+					 osi->Stop();
+
+					 groupBox2->Enabled = true;
+					 groupBox3->Enabled = true;
+				 }
+
+
+			 }
+		 }
+		 
+private: System::Void ContadorDias_Tick(System::Object^ sender, System::EventArgs^ e) {
+	validarRECORDATORIO();
+	GlobalDia++;
+	lblDia->Text = System::Convert::ToString(GlobalDia);
+	if (GlobalDia == 30) {
+		GlobalDia = 1;
+	}
+	
+}
+
+
+		 
+private: System::Void Button3_Click(System::Object^ sender, System::EventArgs^ e) {
+	System::Windows::Forms::DialogResult::Yes;
+	if (MessageBox::Show(System::Convert::ToString(ArregloString[AyudaDia]), "¿Seguro de borrar?", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes)
+	{
+		MessageBox::Show("Adios actividades", "BORRAR");
+		ArregloString[AyudaDia] = "";
+	}
+	else
+	{
+		MessageBox::Show("No se borro", "NO BORRAR");
+	}
+
+}
+private: System::Void Button2_Click(System::Object^ sender, System::EventArgs^ e) {
+	groupAgregar->Enabled = true;
+}
+private: System::Void Aplazador_Tick(System::Object^ sender, System::EventArgs^ e) {
+	if (Aplazador->Interval == 6000) {
+		Aplazador->Enabled = false;
+		validarRECORDATORIO();
+	}
+}
+private: System::Void Button1_Click_1(System::Object^ sender, System::EventArgs^ e) {
+	button4->Enabled = true;
+	btnLeer->Enabled = true;
+	Ruta2 = txtAlarma->Text;
+}
+private: System::Void Button4_Click(System::Object^ sender, System::EventArgs^ e) {
+	SoundPlayer^ osi = gcnew SoundPlayer(Ruta2);
+	osi->PlayLooping();
+}
+
+
+private: System::Void Button5_Click(System::Object^ sender, System::EventArgs^ e) {
+	StreamWriter^ streamwriter = gcnew StreamWriter(Ruta);
+	String^ textoDelArchivo;
+	for (int i = 0; i < ArregloString->Length;i++) {
+		
+		if (i == 29) {
+			textoDelArchivo += i + "," + ArregloString[i];
+		}
+		else {
+			textoDelArchivo += i + "," + ArregloString[i] + "\n";
+		}
+	}
+	streamwriter->Write(textoDelArchivo);
+	streamwriter->Close();
+}
 };
 }
