@@ -186,6 +186,9 @@ private: System::Windows::Forms::Button^ button1;
 private: System::Windows::Forms::Label^ label7;
 private: System::Windows::Forms::Button^ button4;
 private: System::Windows::Forms::Button^ button5;
+private: System::Windows::Forms::Label^ lblMes;
+
+
 
 
 private: System::ComponentModel::IContainer^ components;
@@ -303,6 +306,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
+			this->lblMes = (gcnew System::Windows::Forms::Label());
 			this->groupBox2->SuspendLayout();
 			this->groupBox3->SuspendLayout();
 			this->groupAgregar->SuspendLayout();
@@ -1294,11 +1298,21 @@ private: System::ComponentModel::IContainer^ components;
 			this->button5->UseVisualStyleBackColor = true;
 			this->button5->Click += gcnew System::EventHandler(this, &Calendario::Button5_Click);
 			// 
+			// lblMes
+			// 
+			this->lblMes->AutoSize = true;
+			this->lblMes->Location = System::Drawing::Point(20, 432);
+			this->lblMes->Name = L"lblMes";
+			this->lblMes->Size = System::Drawing::Size(48, 17);
+			this->lblMes->TabIndex = 69;
+			this->lblMes->Text = L"lblMes";
+			// 
 			// Calendario
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1192, 475);
+			this->Controls->Add(this->lblMes);
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->label7);
@@ -1327,6 +1341,7 @@ private: System::ComponentModel::IContainer^ components;
 		}
 #pragma endregion
 	private: System::Void Calendario_Load(System::Object^ sender, System::EventArgs^ e) {
+		lblMes->Text = System::Convert::ToString(DateTime::Now);
 	}
 
 			 ///////////////////////////////////////////////////////////////////////////////////////////////////////
